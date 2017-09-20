@@ -9,7 +9,7 @@ class IPinverse{
     {
     {48,8,48,16,56,24,64,32},
     {39,7,47,15,55,23,63,31},
-    {38,6,46,14,54,22,62,30,
+    {38,6,46,14,54,22,62,30},
     {37,5,45,13,53,21,61,29},
     {36,4,44,12,52,20,60,28},
     {35,3,43,11,51,19,59,27},
@@ -23,8 +23,10 @@ class IPinverse{
    public static String permute(String bits){
        assert bits.length() == 64;
        String result = "";
-       for (int col; col <8; col++){
-           result += bits.charAt(finalPermutation[row][col]-1);
+       for(int row=0; row<8; row++){
+           for(int col =0; col<8; col++){
+              result += bits.charAt(finalPermutation[row][col]-1);
+            }
        }
       return result;
    }
