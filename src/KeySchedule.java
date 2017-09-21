@@ -1,5 +1,5 @@
 /**
-Author: Put your name here
+Author: Fawaz Alhenaki
 */
 class KeySchedule{
    /* Initialize lookup tables for PC_1 and PC_2 */
@@ -73,8 +73,28 @@ class KeySchedule{
       @return an array of 16 subkeys
    */
    public static String[] generateSubkeysForEncryption(String key){
-          
-      return null;
+        
+       String[] subkeys = new String[16];
+       String firstOutput = pc_1(key);
+       String c = firstOutput.substring(0, 28);
+       String d = firstOutput.substring(28);
+       
+       for(int round = 1; round <= 16; round++) {
+           if (round == 1) {
+               ; // don't shift
+           } else if (round == 2 || round == 9 || round == 16) {
+               // right shift by 1 bit
+               c = c.charAt(27) + c.substring(0, 27);
+               d = d.charAt(27) + d.substring(0, 27);
+           } else {
+               // right shift by 2 bits
+               c = c.substring(26, 28) + c.substring(0, 26);
+               d = d.substring(26, 28) + d.substring(0, 26);
+           }
+           // combine c+d, PC-2 substitution, store in subkeys array
+           subkeys[round-1] = pc_2(c + d);
+       }
+       return subkeys;
    }
    /**
       The key schedule for encryption generates 16 subkeys from main key

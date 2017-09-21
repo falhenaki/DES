@@ -1,7 +1,5 @@
-import java.lang.reflect.Array;
-
 /**
-    Author: Your name here
+    Author: Fawaz Alhenaki
     FeistelNetwork consists of 16 rounds. 
     Each round performs identical operations.
 */
