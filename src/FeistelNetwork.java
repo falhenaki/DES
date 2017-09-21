@@ -148,9 +148,55 @@ class FeistelNetwork{
      * @return a 32-bit string; combined outputs of the S-boxes
      */
     public static String sBoxes(String input) {
-        return null;
+        String result = "";
+        if(input.length() % 6 == 0) {
+            
+        }
+        else{
+            return input.length() + "";
+        }
+
+        String[] sixbitchunks = new String[8];
+        int chunk = 0;
+        while(input.length() > 0) {
+            String nextChunk = input.substring(0,6);
+            // store the chunk. 
+            nextChunk = boxSub(nextChunk, chunk);
+           // System.out.print("mychunk \n" + chunk);
+            result = result + nextChunk;
+            sixbitchunks[chunk] = nextChunk;
+            chunk++;
+            input = input.substring(6,input.length());
+            
+       }        
+        return result;
     }
     
+    /* input is a 6 bit block
+     * box is the number of box (0..7)
+     * output is in the 6 to 4 bits
+     */
+    private static String boxSub(String input, int box) {
+                
+        String innerstr = input.substring(1,5);
+        String outerstr = ( String.valueOf(input.charAt(0)) + input.charAt(5));
+
+        int inner = Integer.parseInt(innerstr,2);
+        //System.out.print("inner bits " + innerstr + "\n");
+        
+        int outer = Integer.parseInt(outerstr,2);
+        //System.out.print("outer bits " + outerstr + "\n");
+
+        //System.out.print("row" + outer + "column" + inner);
+        System.out.print("S box result " + SBoxes[box][outer][inner] + "\n");
+        String Sboxresult = Integer.toBinaryString(SBoxes[box][outer][inner]);
+        
+        //add the beginning 0s
+        while (Sboxresult.length() < 4){
+            Sboxresult = "0" + Sboxresult; 
+        }
+        return Sboxresult;//Integer.parseInt(SBoxes[box][outer][inner] + "",2) + "";
+    }
     /**
      * Permutes 32-bit input using the P permutation table
      * @param input - 32-bit string to feed into the P permutation table
