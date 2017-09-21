@@ -1,3 +1,5 @@
+import java.lang.reflect.Array;
+
 /**
     Author: Your name here
     FeistelNetwork consists of 16 rounds. 
@@ -106,10 +108,9 @@ class FeistelNetwork{
      * @return resulting string of the XOR operation
      */
     public static String xor(String firstInput, String secondInput) { 
+        
+       assert firstInput.length() == secondInput.length();
        String result = "";
-       if(firstInput.length() != secondInput.length()){
-           return result;
-       }
       
        int inputlength = firstInput.length();
        for (int i = 0; i < inputlength; i++){
@@ -129,7 +130,14 @@ class FeistelNetwork{
      * @return a 48-bit string
      */
     public static String expansion(String r) {
-       return null;
+        assert r.length() == 32;
+        String result = "";
+        for(int row=0; row<8; row++){
+           for(int col =0; col<6; col++){
+              result += r.charAt(Expansion[row][col]-1);
+            }
+        }
+        return result;
     }
     
     /**
@@ -149,6 +157,14 @@ class FeistelNetwork{
      * @return a 32-bit string
      */
     public static String pPermutation(String input) {
-        return null;
-    }
+        assert input.length() == 32;
+        
+        String result = "";
+        for(int row=0; row<4; row++){
+           for(int col =0; col<8; col++){
+              result += input.charAt(PPermutation[row][col]-1);
+            }
+        }
+        return result;
+     }
 }
