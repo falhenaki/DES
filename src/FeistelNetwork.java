@@ -105,8 +105,22 @@ class FeistelNetwork{
      * @param secondInput - second string to XOR
      * @return resulting string of the XOR operation
      */
-    public static String xor(String firstInput, String secondInput) {        
-       return null;
+    public static String xor(String firstInput, String secondInput) { 
+       String result = "";
+       if(firstInput.length() != secondInput.length()){
+           return result;
+       }
+      
+       int inputlength = firstInput.length();
+       for (int i = 0; i < inputlength; i++){
+           if(firstInput.charAt(i) == secondInput.charAt(i)){
+               result = result + "0";
+           }
+           else{
+               result = result + "1";
+           }
+       }
+       return result;
     }
     
     /**
