@@ -85,7 +85,22 @@ class FeistelNetwork{
         @return a 64-bit string generated after round 16.    
      */
     public static String iterate(String input, String[] subkeys){
-        return null;      
+        
+        String firsthalf = input.substring(0, 32); //first half of the block
+        String secondhalf = input.substring(32, 64); //second half of the block
+        String strtemp;
+        
+        for (int i = 0; i < 16; i++){
+            String fFunOutput = FeistelNetwork.fFunction(secondhalf, subkeys[i]);
+            //xor left half with the output of the ffunction
+            FeistelNetwork.xor(firsthalf, fFunOutput);
+        
+            //switching sides
+            strtemp = firsthalf;
+            firsthalf = secondhalf;
+            secondhalf = strtemp;
+        }
+        return firsthalf+secondhalf;      
     }
     
     /**
@@ -98,7 +113,12 @@ class FeistelNetwork{
      * @return a 32-bit output F(r, key)
      */
     public static String fFunction(String r, String key) {
-        return null;    
+        //expand r from 32 bit to 48 bit
+        r = FeistelNetwork.expansion(r);
+        r = FeistelNetwork.xor(r, key);
+        r = FeistelNetwork.sBoxes(r);
+        r = FeistelNetwork.pPermutation(r);
+        return r;    
     }
     
     /**
@@ -157,6 +177,7 @@ class FeistelNetwork{
         }
 
         String[] sixbitchunks = new String[8];
+        
         int chunk = 0;
         while(input.length() > 0) {
             String nextChunk = input.substring(0,6);
@@ -181,21 +202,16 @@ class FeistelNetwork{
         String innerstr = input.substring(1,5);
         String outerstr = ( String.valueOf(input.charAt(0)) + input.charAt(5));
 
-        int inner = Integer.parseInt(innerstr,2);
-        //System.out.print("inner bits " + innerstr + "\n");
-        
+        int inner = Integer.parseInt(innerstr,2);   
         int outer = Integer.parseInt(outerstr,2);
-        //System.out.print("outer bits " + outerstr + "\n");
 
-        //System.out.print("row" + outer + "column" + inner);
-        System.out.print("S box result " + SBoxes[box][outer][inner] + "\n");
         String Sboxresult = Integer.toBinaryString(SBoxes[box][outer][inner]);
         
         //add the beginning 0s
         while (Sboxresult.length() < 4){
             Sboxresult = "0" + Sboxresult; 
         }
-        return Sboxresult;//Integer.parseInt(SBoxes[box][outer][inner] + "",2) + "";
+        return Sboxresult;
     }
     /**
      * Permutes 32-bit input using the P permutation table
