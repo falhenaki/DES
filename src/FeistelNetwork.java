@@ -79,24 +79,25 @@ class FeistelNetwork
     public static String iterate(String input, String[] subkeys)
     {
         assert input.length() == 64;
-        
         String firsthalf = input.substring(0, 32); // first half of the block
         String secondhalf = input.substring(32, 64); // second half of the block
         String strtemp;
 
         for (int i = 0; i < 16; i++)
         {
+            //System.out.println(i);
             String fFunOutput = FeistelNetwork
                     .fFunction(secondhalf, subkeys[i]);
             // xor left half with the output of the ffunction
-            FeistelNetwork.xor(firsthalf, fFunOutput);
+            firsthalf = FeistelNetwork.xor(firsthalf, fFunOutput);
 
             // switching sides
             strtemp = firsthalf;
             firsthalf = secondhalf;
             secondhalf = strtemp;
+            //String result = firsthalf+secondhalf;
         }
-        return firsthalf + secondhalf;
+        return  secondhalf + firsthalf;
     }
 
     /**
@@ -211,7 +212,6 @@ class FeistelNetwork
             sixbitchunks[chunk] = nextChunk;
             chunk++;
             input = input.substring(6, input.length());
-
         }
         return result;
     }

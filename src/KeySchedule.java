@@ -56,7 +56,11 @@ class KeySchedule{
       @return shifted half by offset positions
    */
    public static String shiftLeft(String half, int offset){
-       return null;      
+       assert half.length() == 28;
+       String a, b;
+       a = half.substring(0, 28-offset);
+       b = half.substring(28-offset);
+       return a+b;     
    }
    
    public static String shiftRight(String half, int offset){
@@ -83,13 +87,13 @@ class KeySchedule{
            if (round == 1) {
                ; // don't shift
            } else if (round == 2 || round == 9 || round == 16) {
-               // right shift by 1 bit
-               c = c.charAt(27) + c.substring(0, 27);
-               d = d.charAt(27) + d.substring(0, 27);
+               // left shift by 1 bit
+               c = c.substring(1, 28) + c.charAt(0);
+               d = d.substring(1, 28) + d.charAt(0);
            } else {
-               // right shift by 2 bits
-               c = c.substring(26, 28) + c.substring(0, 26);
-               d = d.substring(26, 28) + d.substring(0, 26);
+               // left shift by 2 bits
+               c = c.substring(0, 2) + c.substring(2, 28);
+               d = d.substring(0, 2) + c.substring(2, 28);
            }
            // combine c+d, PC-2 substitution, store in subkeys array
            subkeys[round-1] = pc_2(c + d);
